@@ -9,5 +9,17 @@ There is no automated test for this one, this is more for you to understand time
 */
 
 function calculateTime(n) {
-    return 0.01;
+    let beforeTime = new Date().getTime()
+    console.log("Before Loop: ", beforeTime)
+
+    for(let i=0;i<1000000000;i++){
+
+    }
+
+    let afterTime = new Date().getTime()
+    console.log("After Loop: ", afterTime)
+
+   return afterTime-beforeTime
 }
+
+console.log("Total time taken: ", calculateTime())

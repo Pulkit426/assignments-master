@@ -4,7 +4,14 @@
 */
 
 function isPalindrome(str) {
-  return true;
-}
-
-module.exports = isPalindrome;
+  let str1 = str.split("").filter(isAlphaNumeric).join("").toLowerCase()
+  let str2 = str1.split("").reverse().join("")
+  
+    return str1===str2;
+  }
+  
+  function isAlphaNumeric(char){
+    return ( (char!== " ") && ((char>='a' && char<='z') || (char>='A' && char<='Z') || (char>=0 || char<=9)) )
+  }
+  
+  module.exports = isPalindrome;

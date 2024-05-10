@@ -1,0 +1,2 @@
+HELLO World, This is a text line fetched through fs readfile
+

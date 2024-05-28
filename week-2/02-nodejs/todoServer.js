@@ -39,11 +39,89 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+// let todos = [
+//   {
+//       "id": "90701d77-7810-427f-b384-a82798aaa",
+//       "title": "tod1",
+//       "description": "todo1",
+//       "completed": "false"
+//   },
+//   {
+//       "id": "7506a91f-96c1-45c0-8384-35843e51866f",
+//       "title": "todo",
+//       "description": "todo",
+//       "completed": "false"
+//   },
+//   {
+//       "id": "27562aac-8f59-4aa8-b0eb-649254aefa45",
+//       "title": "todo5",
+//       "description": "todolkhc",
+//       "completed": "false"
+//   }];
+
+let todos = [];
+const { v4: uuidv4 } = require("uuid");
+
+const express = require("express");
+const bodyParser = require("body-parser");
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.get("/todos", (req, res) => {
+  res.status(200).json(todos);
+});
+
+app.get("/todos/:id", (req, res) => {
+  const { id } = req.params;
+  const todoItem = todos.find((item) => item.id === id);
+
+  if (todoItem) res.status(200).json(todoItem);
+  else res.status(404).send("ToDo Item not found");
+});
+
+app.post("/todos", (req, res) => {
+  const { title, description, completed } = req.body;
+
+  const newTodoItem = {
+    id: uuidv4(),
+    title,
+    description,
+    completed,
+  };
+
+  todos.unshift(newTodoItem);
+
+  res.status(201).json(newTodoItem);
+});
+
+app.put("/todos/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, description, completed } = req.body;
+  let flag = false;
+
+  todos = todos.map((item) => {
+    if (item.id === id) {
+      flag = true;
+      return { ...item, title, description, completed };
+    } else return item;
+  });
+
+  if (!flag) res.status(404).send("ID not found");
+  else res.status(200).send("Succesfully edited");
+});
+
+app.delete("/todos/:id", (req, res) => {
+  const { id } = req.params;
+
+  let itemToDelete = todos.find((item) => item.id === id);
+
+  if (!itemToDelete) res.status(404).send("ID not found");
+  else {
+    todos = todos.filter((item) => item.id !== id);
+    res.status(200).send("Successfully Deleted");
+  }
+});
+
+module.exports = app;
